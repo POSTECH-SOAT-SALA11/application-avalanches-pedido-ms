@@ -3,6 +3,8 @@ package com.avalanches.applicationbusinessrules.usecases;
 import com.avalanches.applicationbusinessrules.usecases.interfaces.PedidoUseCaseInterface;
 import com.avalanches.enterprisebusinessrules.entities.Pedido;
 import com.avalanches.enterprisebusinessrules.entities.PedidoProduto;
+import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
+import com.avalanches.frameworksanddrivers.databases.StatusPedidoInvalidoException;
 import com.avalanches.interfaceadapters.gateways.interfaces.PedidoGatewayInterface;
 import com.avalanches.interfaceadapters.gateways.interfaces.ProdutoGatewayInterface;
 import org.webjars.NotFoundException;
@@ -40,6 +42,19 @@ public class PedidoUseCase implements PedidoUseCaseInterface {
         return pedidoGateway.listar();
     }
 
+    @Override
+    public void atualizaStatus(Integer idPedido, StatusPedido statusPedido, PedidoGatewayInterface pedidoGateway) {
+        if (!pedidoGateway.verificaPedidoExiste(idPedido))  {
+            throw new NotFoundException("Pedido não encontrado.");
+        }
+
+        if(!VerificaStatusValido(idPedido, statusPedido, pedidoGateway)){
+            throw new StatusPedidoInvalidoException(statusPedido);
+        }
+
+        pedidoGateway.atualizaStatus(idPedido, statusPedido);
+    }
+
 
     private BigDecimal calcularValorTotal(Pedido pedido, ProdutoGatewayInterface produtoGateway) {
         BigDecimal valorTotal = BigDecimal.ZERO;
@@ -51,5 +66,19 @@ public class PedidoUseCase implements PedidoUseCaseInterface {
             valorTotal = valorTotal.add(valorProduto);
         }
         return valorTotal;
+    }
+
+    private boolean VerificaStatusValido(Integer idPedido, StatusPedido statusPedido, PedidoGatewayInterface pedidoGateway) {
+
+        StatusPedido statusAtual = StatusPedido.fromValue(pedidoGateway.buscarStatusPedido(idPedido));
+
+        StatusPedido proximoStatusValido = switch (statusAtual) {
+            case RECEBIDO -> StatusPedido.EMPREPARACAO;
+            case EMPREPARACAO -> StatusPedido.PRONTO;
+            case PRONTO -> StatusPedido.FINALIZADO;
+            default -> null;
+        };
+
+        return statusPedido == proximoStatusValido;
     }
 }

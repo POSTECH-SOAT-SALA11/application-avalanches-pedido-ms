@@ -2,6 +2,7 @@ package com.avalanches.interfaceadapters.controllers;
 
 import com.avalanches.applicationbusinessrules.usecases.PedidoUseCase;
 import com.avalanches.enterprisebusinessrules.entities.Pedido;
+import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
 import com.avalanches.frameworksanddrivers.databases.interfaces.BancoDeDadosContextoInterface;
 import com.avalanches.interfaceadapters.controllers.interfaces.PedidoControllerInterface;
 import com.avalanches.interfaceadapters.gateways.PedidoGateway;
@@ -27,6 +28,13 @@ public class PedidoController implements PedidoControllerInterface {
         return pedidoUseCase.cadastrar(pedido, pedidoGateway, produtoGateway);
     }
 
+    @Override
+    public void atualizaStatus(Integer idPedido, StatusPedido statusPedido, BancoDeDadosContextoInterface bancoDeDadosContexto) {
+        JsonPresenterInterface jsonPresenter = new JsonPresenter();
+        PedidoGatewayInterface pedidoGateway = new PedidoGateway(bancoDeDadosContexto, jsonPresenter);
+        PedidoUseCase pedidoUseCase = new PedidoUseCase();
+        pedidoUseCase.atualizaStatus(idPedido, statusPedido, pedidoGateway);
+    }
 
     @Override
     public List<PedidoDto> listar(BancoDeDadosContextoInterface bancoDeDadosContexto) {

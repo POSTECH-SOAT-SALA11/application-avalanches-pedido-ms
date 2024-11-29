@@ -32,6 +32,14 @@ public class PedidoApi implements PedidoApiInterface {
         return ResponseEntity.status(HttpStatus.CREATED).body(numeroPedido);
     }
 
+    @PutMapping("/{idPedido}")
+    @Override
+    public ResponseEntity<Void> atualizaStatus(@PathVariable("idPedido") Integer idPedido, @RequestBody StatusPedido statusPedido) {
+        PedidoControllerInterface pedidoController = new PedidoController();
+        pedidoController.atualizaStatus(idPedido, statusPedido, bancoDeDadosContexto);
+        return ResponseEntity.ok().build();
+    }
+
 
     @GetMapping
     @Override

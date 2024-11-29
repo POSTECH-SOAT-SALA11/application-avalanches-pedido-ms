@@ -16,6 +16,9 @@ public interface PedidoApiInterface {
             description = "Endpoint utilizado para realizar o cadastro de pedido, já marcando-o como recebido.")
     ResponseEntity<Integer> cadastrar(@Valid @RequestBody PedidoParams pedido);
 
+    @Operation(summary = "Atualiza status do pedido.",
+            description = "Endpoint utilizado para realizar a atualização do status do pedido.")
+    ResponseEntity<Void> atualizaStatus(@PathVariable("idPedido") Integer idPedido, @RequestBody StatusPedido statusPedido);
 
     @Operation(summary = "Listagem de pedido.",
             description = "Endpoint utilizado para realizar a listagem dos pedidos, sem os finalizados, e ordenado pela seguinte sequência:  Pronto, Em Preparação, Recebido, e Data criação")
