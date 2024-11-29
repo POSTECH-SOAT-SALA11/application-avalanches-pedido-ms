@@ -1,4 +1,4 @@
-package com.avalanches.repository;
+package com.avalanches.interfaceadapters.gateways;
 
 import com.avalanches.enterprisebusinessrules.entities.*;
 import com.avalanches.interfaceadapters.gateways.interfaces.ProdutoGatewayInterface;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 public class ProdutoGatewayTest {
     @Mock
-    private ProdutoGatewayInterface produtoGateway;
+    private ProdutoGateway produtoGateway;
 
     AutoCloseable openMocks;
 

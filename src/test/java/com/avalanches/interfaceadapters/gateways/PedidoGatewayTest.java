@@ -1,4 +1,4 @@
-package com.avalanches.repository;
+package com.avalanches.interfaceadapters.gateways;
 
 import com.avalanches.enterprisebusinessrules.entities.Pedido;
 import com.avalanches.enterprisebusinessrules.entities.PedidoProduto;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 public class PedidoGatewayTest {
 
     @Mock
-    private PedidoGatewayInterface pedidoGateway;
+    private PedidoGateway pedidoGateway;
 
 
     AutoCloseable openMocks;

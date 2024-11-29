@@ -1,6 +1,5 @@
-package com.avalanches.usecases;
+package com.avalanches.applicationbusinessrules.usecases;
 
-import com.avalanches.applicationbusinessrules.usecases.ProdutoUseCase;
 import com.avalanches.enterprisebusinessrules.entities.CategoriaProduto;
 import com.avalanches.enterprisebusinessrules.entities.Produto;
 import com.avalanches.interfaceadapters.gateways.interfaces.ImagemGatewayInterface;
@@ -14,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
-import static com.avalanches.repository.ProdutoGatewayTest.getProduto;
+import static com.avalanches.interfaceadapters.gateways.ProdutoGatewayTest.getProduto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

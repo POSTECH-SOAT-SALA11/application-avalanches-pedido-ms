@@ -1,4 +1,4 @@
-package com.avalanches.repository;
+package com.avalanches.interfaceadapters.gateways;
 
 import com.avalanches.enterprisebusinessrules.entities.Imagem;
 import com.avalanches.interfaceadapters.gateways.interfaces.ImagemGatewayInterface;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 public class ImagemGatewayTest {
 
     @Mock
-    private ImagemGatewayInterface imagemGateway;
+    private ImagemGateway imagemGateway;
 
 
     AutoCloseable openMocks;

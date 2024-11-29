@@ -1,12 +1,10 @@
-package com.avalanches.usecases;
+package com.avalanches.applicationbusinessrules.usecases;
 
-import com.avalanches.applicationbusinessrules.usecases.PedidoUseCase;
 import com.avalanches.enterprisebusinessrules.entities.Pedido;
 import com.avalanches.enterprisebusinessrules.entities.PedidoProduto;
 import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
 import com.avalanches.interfaceadapters.gateways.PedidoGateway;
-import com.avalanches.interfaceadapters.gateways.interfaces.PedidoGatewayInterface;
-import com.avalanches.interfaceadapters.gateways.interfaces.ProdutoGatewayInterface;
+import com.avalanches.interfaceadapters.gateways.ProdutoGateway;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,10 +23,10 @@ import static org.mockito.Mockito.*;
 
 public class PedidoUseCaseTest {
     @Mock
-    private PedidoGatewayInterface pedidoGateway;
+    private PedidoGateway pedidoGateway;
 
     @Mock
-    private ProdutoGatewayInterface produtoGateway;
+    private ProdutoGateway produtoGateway;
 
     @InjectMocks
     private PedidoUseCase pedidoUseCase;
