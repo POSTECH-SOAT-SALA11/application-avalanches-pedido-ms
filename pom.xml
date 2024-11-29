@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.avalanches</groupId>
-    <artifactId>avalanches</artifactId>
+    <artifactId>avalanches-pedido</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>avalanches</name>
+    <name>avalanches-pedido</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>18</java.version>
