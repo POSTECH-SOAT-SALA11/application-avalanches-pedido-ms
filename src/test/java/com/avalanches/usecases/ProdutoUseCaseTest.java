@@ -14,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
-import static com.avalanches.repository.ProdutoRepositoryTest.getProduto;
+import static com.avalanches.repository.ProdutoGatewayTest.getProduto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

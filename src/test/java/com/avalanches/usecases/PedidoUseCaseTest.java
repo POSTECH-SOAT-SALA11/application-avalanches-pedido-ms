@@ -4,6 +4,7 @@ import com.avalanches.applicationbusinessrules.usecases.PedidoUseCase;
 import com.avalanches.enterprisebusinessrules.entities.Pedido;
 import com.avalanches.enterprisebusinessrules.entities.PedidoProduto;
 import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
+import com.avalanches.interfaceadapters.gateways.PedidoGateway;
 import com.avalanches.interfaceadapters.gateways.interfaces.PedidoGatewayInterface;
 import com.avalanches.interfaceadapters.gateways.interfaces.ProdutoGatewayInterface;
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +53,7 @@ public class PedidoUseCaseTest {
 
         //Act
         doNothing().when(pedidoGateway).cadastrar(any(Pedido.class));
+        when(produtoGateway.verificaProdutoExiste(anyInt())).thenReturn(true);
 
         pedidoUseCase.cadastrar(pedido, pedidoGateway, produtoGateway);
 
@@ -81,8 +83,11 @@ public class PedidoUseCaseTest {
     @Test
     void deveAtualizarStatus(){
         //Arrange
-        doNothing().when(pedidoGateway).atualizaStatus(anyInt(),any(StatusPedido.class));
+
         //Act
+        doNothing().when(pedidoGateway).atualizaStatus(anyInt(),any(StatusPedido.class));
+        when(pedidoGateway.verificaPedidoExiste(anyInt())).thenReturn(true);
+        when(pedidoGateway.buscarStatusPedido(anyInt())).thenReturn(StatusPedido.EMPREPARACAO.getValue());
 
         pedidoUseCase.atualizaStatus(1, StatusPedido.PRONTO, pedidoGateway);
 
