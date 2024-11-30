@@ -26,5 +26,19 @@ public class PedidoBuilder {
                 listaProdutos,
                 10
         );
+
+
     }
+
+    public static @NotNull ArrayList<PedidoProduto> getPedidoProdutos() {
+        var listaProdutos = new ArrayList<PedidoProduto>();
+        var pedidoProduto1 = new PedidoProduto(1,3,new BigDecimal("10"));
+        var pedidoProduto2 = new PedidoProduto(2,1,new BigDecimal("20"));
+
+        listaProdutos.add(pedidoProduto1);
+        listaProdutos.add(pedidoProduto2);
+
+        return listaProdutos;
+    }
+
 }

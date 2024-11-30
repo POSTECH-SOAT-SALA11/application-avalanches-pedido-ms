@@ -7,8 +7,6 @@ import com.avalanches.enterprisebusinessrules.entities.Produto;
 import com.avalanches.frameworksanddrivers.databases.interfaces.BancoDeDadosContextoInterface;
 import com.avalanches.interfaceadapters.gateways.ImagemGateway;
 import com.avalanches.interfaceadapters.gateways.ProdutoGateway;
-import com.avalanches.interfaceadapters.gateways.interfaces.ImagemGatewayInterface;
-import com.avalanches.interfaceadapters.gateways.interfaces.ProdutoGatewayInterface;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

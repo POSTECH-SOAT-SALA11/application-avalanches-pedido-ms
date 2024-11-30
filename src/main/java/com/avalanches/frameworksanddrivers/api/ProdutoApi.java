@@ -10,6 +10,7 @@ import com.avalanches.interfaceadapters.presenters.dtos.ProdutoDto;
 import com.avalanches.frameworksanddrivers.databases.interfaces.BancoDeDadosContextoInterface;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -29,7 +30,7 @@ public class ProdutoApi implements ProdutoApiInterface {
     @PostMapping
     @Override
     public ResponseEntity<Void> cadastrar(@Valid @RequestBody ProdutoParams produto) {
-        ProdutoControllerInterface produtoController = new ProdutoController();
+        ProdutoControllerInterface produtoController = criarProdutoController();
         produtoController.cadastrarProduto(Convert.produtoParamsToProduto(produto), bancoDeDadosContexto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -37,7 +38,7 @@ public class ProdutoApi implements ProdutoApiInterface {
     @PutMapping("/{id}")
     @Override
     public ResponseEntity<Void> atualizar(@PathVariable int id, @Valid @RequestBody ProdutoParams produto) {
-        ProdutoControllerInterface produtoController = new ProdutoController();
+        ProdutoControllerInterface produtoController = criarProdutoController();
         Produto produtoEntity = Convert.produtoParamsToProduto(produto);
         produtoEntity.setId(id);
         produtoController.atualizarProduto(produtoEntity, bancoDeDadosContexto);
@@ -47,7 +48,7 @@ public class ProdutoApi implements ProdutoApiInterface {
     @DeleteMapping("/{id}")
     @Override
     public ResponseEntity<Void> excluir(@PathVariable int id) {
-        ProdutoControllerInterface produtoController = new ProdutoController();
+        ProdutoControllerInterface produtoController = criarProdutoController();
         produtoController.excluirProduto(id, bancoDeDadosContexto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -55,9 +56,13 @@ public class ProdutoApi implements ProdutoApiInterface {
     @GetMapping("/{categoriaProduto}")
     @Override
     public ResponseEntity<List<ProdutoDto>> consultarPorCategoria(@PathVariable("categoriaProduto") CategoriaProduto categoriaProduto){
-        ProdutoControllerInterface produtoController = new ProdutoController();
+        ProdutoControllerInterface produtoController = criarProdutoController();
         List<ProdutoDto> response = produtoController.consultarProdutos(categoriaProduto, bancoDeDadosContexto);
         return ResponseEntity.ok().body(response);
+    }
+
+    protected ProdutoController criarProdutoController() {
+        return new ProdutoController();
     }
 
 
