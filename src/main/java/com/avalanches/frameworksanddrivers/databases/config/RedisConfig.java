@@ -12,7 +12,7 @@ import org.springframework.core.env.Environment;
 public class RedisConfig {
 
     @Autowired
-    private Environment ambiente;
+    public Environment ambiente;
 
     @Bean
     public RedisClient redisClient() {

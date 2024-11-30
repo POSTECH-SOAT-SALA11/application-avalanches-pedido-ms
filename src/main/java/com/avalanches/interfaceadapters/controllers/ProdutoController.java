@@ -19,17 +19,17 @@ public class ProdutoController implements ProdutoControllerInterface {
 
     @Override
     public void cadastrarProduto(Produto produto, BancoDeDadosContextoInterface bancoDeDadosContexto) {
-        ProdutoGatewayInterface produtoGateway = new ProdutoGateway(bancoDeDadosContexto);
-        ImagemGatewayInterface imagemGateway = new ImagemGateway(bancoDeDadosContexto);
-        ProdutoUseCase produtoUseCase = new ProdutoUseCase();
+        ProdutoGatewayInterface produtoGateway = criarProdutoGateway(bancoDeDadosContexto);
+        ImagemGatewayInterface imagemGateway = criarImagemGateway(bancoDeDadosContexto);
+        ProdutoUseCase produtoUseCase = criarProdutoUseCase();
         produtoUseCase.cadastrarProduto(produto, produtoGateway, imagemGateway);
     }
 
     @Override
     public List<ProdutoDto> consultarProdutos(CategoriaProduto categoriaProduto, BancoDeDadosContextoInterface bancoDeDadosContexto) {
-        ProdutoGatewayInterface produtoGateway = new ProdutoGateway(bancoDeDadosContexto);
-        ImagemGatewayInterface imagemGateway = new ImagemGateway(bancoDeDadosContexto);
-        ProdutoUseCase produtoUseCase = new ProdutoUseCase();
+        ProdutoGatewayInterface produtoGateway = criarProdutoGateway(bancoDeDadosContexto);
+        ImagemGatewayInterface imagemGateway = criarImagemGateway(bancoDeDadosContexto);
+        ProdutoUseCase produtoUseCase = criarProdutoUseCase();
         List<Produto> produtos = produtoUseCase.consultarProdutos(categoriaProduto, produtoGateway, imagemGateway);
         ProdutoPresenterInterface produtoPresenter = new ProdutoPresenter();
         return produtoPresenter.produtosToDtos(produtos);
@@ -37,17 +37,29 @@ public class ProdutoController implements ProdutoControllerInterface {
 
     @Override
     public void atualizarProduto(Produto produto, BancoDeDadosContextoInterface bancoDeDadosContexto) {
-        ProdutoGatewayInterface produtoGateway = new ProdutoGateway(bancoDeDadosContexto);
-        ImagemGatewayInterface imagemGateway = new ImagemGateway(bancoDeDadosContexto);
-        ProdutoUseCase produtoUseCase = new ProdutoUseCase();
+        ProdutoGatewayInterface produtoGateway = criarProdutoGateway(bancoDeDadosContexto);
+        ImagemGatewayInterface imagemGateway = criarImagemGateway(bancoDeDadosContexto);
+        ProdutoUseCase produtoUseCase = criarProdutoUseCase();
         produtoUseCase.atualizarProduto(produto, produtoGateway, imagemGateway);
     }
 
     @Override
     public void excluirProduto(int id, BancoDeDadosContextoInterface bancoDeDadosContexto) {
-        ProdutoGatewayInterface produtoGateway = new ProdutoGateway(bancoDeDadosContexto);
-        ImagemGatewayInterface  imagemGateway = new ImagemGateway(bancoDeDadosContexto);
-        ProdutoUseCase produtoUseCase = new ProdutoUseCase();
+        ProdutoGatewayInterface produtoGateway = criarProdutoGateway(bancoDeDadosContexto);
+        ImagemGatewayInterface  imagemGateway = criarImagemGateway(bancoDeDadosContexto);
+        ProdutoUseCase produtoUseCase = criarProdutoUseCase();
         produtoUseCase.excluirProduto(id, produtoGateway, imagemGateway);
+    }
+
+    protected ProdutoUseCase criarProdutoUseCase() {
+        return new ProdutoUseCase();
+    }
+
+    protected ImagemGateway criarImagemGateway(BancoDeDadosContextoInterface bancoDeDadosContexto) {
+        return new ImagemGateway(bancoDeDadosContexto);
+    }
+
+    protected ProdutoGateway criarProdutoGateway(BancoDeDadosContextoInterface bancoDeDadosContexto) {
+        return new ProdutoGateway(bancoDeDadosContexto);
     }
 }

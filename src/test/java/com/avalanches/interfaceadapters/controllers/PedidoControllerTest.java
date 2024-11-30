@@ -7,11 +7,15 @@ import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
 import com.avalanches.frameworksanddrivers.databases.interfaces.BancoDeDadosContextoInterface;
 import com.avalanches.interfaceadapters.gateways.PedidoGateway;
 import com.avalanches.interfaceadapters.gateways.ProdutoGateway;
+import com.avalanches.interfaceadapters.gateways.interfaces.PedidoGatewayInterface;
+import com.avalanches.interfaceadapters.presenters.JsonPresenter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
@@ -30,8 +34,17 @@ public class PedidoControllerTest{
     @Mock
     private ProdutoGateway produtoGateway;
 
+    @InjectMocks
+    private PedidoController pedidoController;
+
+    @Spy
+    private PedidoController pedidoControllerSpy;
+
     @Mock
     private JdbcTemplate jdbcTemplate;
+
+    @Spy
+    private JsonPresenter jsonPresenter;
 
     @Mock
     private PedidoUseCase pedidoUseCase;
@@ -43,6 +56,7 @@ public class PedidoControllerTest{
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
         when(bancoDeDadosContexto.getJdbcTemplate()).thenReturn(jdbcTemplate);
+        pedidoController = new PedidoController();
     }
 
     @AfterEach
@@ -57,8 +71,14 @@ public class PedidoControllerTest{
         var pedido = PedidoBuilder.getPedido();
 
         //Act
+        doReturn(pedidoUseCase).when(pedidoControllerSpy).criarPedidoUseCase();  // Mock method
+        doReturn(pedidoGateway).when(pedidoControllerSpy).criarPedidoGateway(bancoDeDadosContexto,jsonPresenter);  // Mock method
+        doReturn(produtoGateway).when(pedidoControllerSpy).criarProdutoGateway(bancoDeDadosContexto);  // Mock method
+        when(produtoGateway.verificaProdutoExiste(anyInt())).thenReturn(true);
+
         when(pedidoUseCase.cadastrar(any(Pedido.class), any(PedidoGateway.class),any(ProdutoGateway.class))).thenReturn(pedido.getId());
-        pedidoUseCase.cadastrar(pedido, pedidoGateway, produtoGateway);
+
+        pedidoControllerSpy.cadastrar(pedido, bancoDeDadosContexto);
 
         //Assert
         verify(pedidoUseCase, times(1)).cadastrar(any(Pedido.class), any(PedidoGateway.class), any(ProdutoGateway.class));
@@ -74,10 +94,13 @@ public class PedidoControllerTest{
         listaPedidos.add(pedido2);
 
         //Act
+        doReturn(pedidoUseCase).when(pedidoControllerSpy).criarPedidoUseCase();  // Mock method
+        doReturn(pedidoGateway).when(pedidoControllerSpy).criarPedidoGateway(bancoDeDadosContexto,jsonPresenter); // Mock method
 
-        when(pedidoUseCase.listar(pedidoGateway)).thenReturn(listaPedidos);
+        when(pedidoUseCase.listar(any(PedidoGateway.class))).thenReturn(listaPedidos);
+        when(pedidoGateway.listar()).thenReturn(listaPedidos);
 
-        var pedidos = pedidoUseCase.listar(pedidoGateway);
+        var pedidos = pedidoControllerSpy.listar(bancoDeDadosContexto);
 
         //Assert
         assertThat(pedidos).hasSizeGreaterThan(0);
@@ -90,11 +113,14 @@ public class PedidoControllerTest{
         var statusPedido = StatusPedido.PRONTO;
 
         //Act
-        doNothing().when(pedidoGateway).atualizaStatus(anyInt(),any(StatusPedido.class));
+        doReturn(pedidoUseCase).when(pedidoControllerSpy).criarPedidoUseCase();  // Mock method
+        doReturn(pedidoGateway).when(pedidoControllerSpy).criarPedidoGateway(bancoDeDadosContexto,jsonPresenter);  // Mock method
+        when(produtoGateway.verificaProdutoExiste(anyInt())).thenReturn(true);
 
+        doNothing().when(pedidoGateway).atualizaStatus(anyInt(),any(StatusPedido.class));
         doNothing().when(pedidoUseCase).atualizaStatus(anyInt(), any(StatusPedido.class), any(PedidoGateway.class));
 
-        pedidoUseCase.atualizaStatus(idPedido, statusPedido, pedidoGateway);
+        pedidoControllerSpy.atualizaStatus(idPedido, statusPedido, bancoDeDadosContexto);
 
         //Assert
         verify(pedidoUseCase, times(1)).atualizaStatus(anyInt(), any(StatusPedido.class), any(PedidoGateway.class));

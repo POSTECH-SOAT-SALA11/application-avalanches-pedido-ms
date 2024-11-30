@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 public class PostgresConfig {
 
     @Autowired
-    private Environment ambiente;
+    public Environment ambiente;
 
     @Bean
     public DataSource OrigemDados() {

@@ -14,6 +14,7 @@ import com.avalanches.interfaceadapters.presenters.PedidoPresenter;
 import com.avalanches.interfaceadapters.presenters.dtos.PedidoDto;
 import com.avalanches.interfaceadapters.presenters.interfaces.JsonPresenterInterface;
 import com.avalanches.interfaceadapters.presenters.interfaces.PedidoPresenterInterface;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -22,27 +23,39 @@ public class PedidoController implements PedidoControllerInterface {
     @Override
     public Integer cadastrar(Pedido pedido, BancoDeDadosContextoInterface bancoDeDadosContexto) {
         JsonPresenterInterface jsonPresenter = new JsonPresenter();
-        PedidoGatewayInterface pedidoGateway = new PedidoGateway(bancoDeDadosContexto, jsonPresenter);
-        ProdutoGatewayInterface produtoGateway = new ProdutoGateway(bancoDeDadosContexto);
-        PedidoUseCase pedidoUseCase = new PedidoUseCase();
+        PedidoGatewayInterface pedidoGateway = criarPedidoGateway(bancoDeDadosContexto, jsonPresenter);
+        ProdutoGatewayInterface produtoGateway = criarProdutoGateway(bancoDeDadosContexto);
+        PedidoUseCase pedidoUseCase = criarPedidoUseCase();
         return pedidoUseCase.cadastrar(pedido, pedidoGateway, produtoGateway);
     }
 
     @Override
     public void atualizaStatus(Integer idPedido, StatusPedido statusPedido, BancoDeDadosContextoInterface bancoDeDadosContexto) {
         JsonPresenterInterface jsonPresenter = new JsonPresenter();
-        PedidoGatewayInterface pedidoGateway = new PedidoGateway(bancoDeDadosContexto, jsonPresenter);
-        PedidoUseCase pedidoUseCase = new PedidoUseCase();
+        PedidoGatewayInterface pedidoGateway = criarPedidoGateway(bancoDeDadosContexto, jsonPresenter);
+        PedidoUseCase pedidoUseCase = criarPedidoUseCase();
         pedidoUseCase.atualizaStatus(idPedido, statusPedido, pedidoGateway);
     }
 
     @Override
     public List<PedidoDto> listar(BancoDeDadosContextoInterface bancoDeDadosContexto) {
         JsonPresenterInterface jsonPresenter = new JsonPresenter();
-        PedidoGatewayInterface pedidoGateway = new PedidoGateway(bancoDeDadosContexto, jsonPresenter);
-        PedidoUseCase pedidoUseCase = new PedidoUseCase();
+        PedidoGatewayInterface pedidoGateway = criarPedidoGateway(bancoDeDadosContexto, jsonPresenter);
+        PedidoUseCase pedidoUseCase = criarPedidoUseCase();
         List<Pedido> pedidos = pedidoUseCase.listar(pedidoGateway);
         PedidoPresenterInterface pedidoPresenter = new PedidoPresenter();
         return pedidoPresenter.pedidosToDtos(pedidos);
+    }
+
+    protected ProdutoGateway criarProdutoGateway(BancoDeDadosContextoInterface bancoDeDadosContexto) {
+        return new ProdutoGateway(bancoDeDadosContexto);
+    }
+
+    protected PedidoGateway criarPedidoGateway(BancoDeDadosContextoInterface bancoDeDadosContexto, JsonPresenterInterface jsonPresenter) {
+        return new PedidoGateway(bancoDeDadosContexto, jsonPresenter);
+    }
+
+    protected PedidoUseCase criarPedidoUseCase() {
+        return new PedidoUseCase();
     }
 }
