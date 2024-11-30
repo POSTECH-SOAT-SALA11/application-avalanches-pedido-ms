@@ -60,7 +60,7 @@ public class PedidoUseCaseTest {
     }
 
     @Test
-    void deveRetornarPedido(){
+    void deveListarPedido(){
         //Arrange
         var listaPedidos = new ArrayList<Pedido>();
         var pedido1 = getPedido();
