@@ -1,4 +1,4 @@
-package com.avalanches.frameworksanddrivers.api.databases.config;
+package com.avalanches.frameworksanddrivers.databases.config;
 
 import com.avalanches.frameworksanddrivers.databases.config.BancoDeDadosContexto;
 import io.lettuce.core.api.sync.RedisCommands;

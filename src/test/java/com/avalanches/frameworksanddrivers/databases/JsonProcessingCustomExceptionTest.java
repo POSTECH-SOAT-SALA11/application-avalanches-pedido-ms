@@ -1,4 +1,4 @@
-package com.avalanches.frameworksanddrivers.api.databases;
+package com.avalanches.frameworksanddrivers.databases;
 
 import com.avalanches.frameworksanddrivers.databases.JsonProcessingCustomException;
 import org.junit.jupiter.api.Test;
