@@ -92,10 +92,6 @@ public class PedidoGateway implements PedidoGatewayInterface {
         pedido.setId((int) keyHolder.getKeys().get("id"));
     }
 
-    protected GeneratedKeyHolder criarGeneratedKeyHolder() {
-        return new GeneratedKeyHolder();
-    }
-
     private void cadastrarRedis(Pedido pedido) {
         String pedidoSerializado = jsonPresenter.serialize(pedido);
         redisCommands.set(getPedidoKey(pedido), pedidoSerializado);

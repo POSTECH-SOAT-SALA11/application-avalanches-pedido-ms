@@ -178,6 +178,25 @@ public class PedidoGatewayTest {
     }
 
     @Test
+    void deveVerificarPedidoNaoExiste_Redis(){
+
+        //Act
+        when(jdbcTemplate.queryForObject(
+                anyString(),
+                any(Object[].class),
+                eq(Integer.class)
+        )).thenReturn(0);
+
+        when(redisCommands.exists(anyString())).thenReturn(0L);
+
+        boolean pedidoExiste = pedidoGateway.verificaPedidoExiste(1);
+
+        //Assert
+
+        assertThat(pedidoExiste).isFalse();
+    }
+
+    @Test
     void deveBuscarStatusPedido_Postgree()
     {
         int idPedido = 1;
@@ -201,7 +220,6 @@ public class PedidoGatewayTest {
     {
         int idPedido = 1;
         var pedido = PedidoBuilder.getPedido();
-        String pedidojson = jsonPresenter.serialize(pedido);
 
         when(jdbcTemplate.queryForObject(
                 anyString(),

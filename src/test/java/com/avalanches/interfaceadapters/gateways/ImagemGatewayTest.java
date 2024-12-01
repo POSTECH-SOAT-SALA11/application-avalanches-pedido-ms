@@ -112,11 +112,18 @@ public class ImagemGatewayTest {
     void deveAtualizarImagem() {
         Imagem imagem = new Imagem(1, "imagem2.jpg", "Descrição 2", "image/jpeg", 3072, "/caminho/imagem2.jpg", new byte[0]);
 
-        doNothing().when(imagemGatewayMock).atualizar(any());
+        try (MockedStatic<Files> mockedFiles = mockStatic(Files.class)) {
+            Path imagePath = Paths.get(IMAGENS, "arquivo.jpg");
 
-        imagemGatewayMock.atualizar(imagem);
+            mockedFiles.when(() -> Files.exists(Paths.get(IMAGENS))).thenReturn(true);
+            mockedFiles.when(() -> Files.exists(any(Path.class))).thenReturn(true);
 
-        assertNotNull(imagem.getId());
+            mockedFiles.when(() -> Files.write(imagePath, new byte[]{})).thenReturn(imagePath);
+
+            imagemGateway.atualizar(imagem);
+
+            assertNotNull(imagem.getId());
+       }
     }
 
     @Test
