@@ -3,31 +3,29 @@ package com.avalanches.interfaceadapters.gateways;
 import com.avalanches.ProdutoBuilder;
 import com.avalanches.enterprisebusinessrules.entities.*;
 import com.avalanches.frameworksanddrivers.databases.config.BancoDeDadosContexto;
-import com.avalanches.interfaceadapters.gateways.interfaces.ProdutoGatewayInterface;
 import com.avalanches.interfaceadapters.gateways.mapper.ImagemRowMapper;
 import com.avalanches.interfaceadapters.gateways.mapper.ProdutoRowMapper;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.data.redis.connection.RedisCommands;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class ProdutoGatewayTest {
-     @Mock
+
+    @Mock
     private JdbcTemplate jdbcTemplate;
+
+
 
     @Mock
     private BancoDeDadosContexto bancoDeDadosContexto;
@@ -79,12 +77,12 @@ public class ProdutoGatewayTest {
         int idImagem = 1;
 
         //Act
-        doNothing().when(produtoGatewayMock).cadastrarImagemProduto(anyInt(),anyInt());
+        when(jdbcTemplate.update(anyString(), eq(idProduto), eq(idImagem))).thenReturn(1);
 
-        produtoGatewayMock.cadastrarImagemProduto(idProduto,idImagem);
+        produtoGateway.cadastrarImagemProduto(idProduto,idImagem);
 
         //Assert
-        verify(produtoGatewayMock, times(1)).cadastrarImagemProduto(anyInt(),anyInt());;
+        verify(jdbcTemplate, times(1)).update(anyString(), eq(idProduto), eq(idImagem));
     }
 
     @Test
@@ -121,12 +119,12 @@ public class ProdutoGatewayTest {
         int idProduto = 1;
         int idImagem = 1;
         //Act
-        doNothing().when(produtoGatewayMock).excluirImagemProduto(anyInt(),anyInt());
+        when(jdbcTemplate.update(anyString(), eq(idProduto), eq(idImagem))).thenReturn(1);
 
-        produtoGatewayMock.excluirImagemProduto(idProduto,idImagem);
+        produtoGateway.excluirImagemProduto(idProduto,idImagem);
 
         //Assert
-        verify(produtoGatewayMock, times(1)).excluirImagemProduto(anyInt(),anyInt());
+        verify(jdbcTemplate, times(1)).update(anyString(), eq(idProduto), eq(idImagem));
     }
 
     @Test

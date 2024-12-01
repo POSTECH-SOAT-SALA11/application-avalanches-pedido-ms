@@ -1,15 +1,21 @@
 package com.avalanches.interfaceadapters.gateways;
 
+import com.avalanches.PedidoBuilder;
 import com.avalanches.enterprisebusinessrules.entities.Pedido;
 import com.avalanches.enterprisebusinessrules.entities.PedidoProduto;
 import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
+import com.avalanches.frameworksanddrivers.databases.config.BancoDeDadosContexto;
 import com.avalanches.interfaceadapters.gateways.interfaces.PedidoGatewayInterface;
+import com.avalanches.interfaceadapters.presenters.JsonPresenter;
+import io.lettuce.core.api.sync.RedisCommands;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -22,7 +28,22 @@ import static org.mockito.Mockito.*;
 public class PedidoGatewayTest {
 
     @Mock
+    private PedidoGateway pedidoGatewayMock;
+
+    @InjectMocks
     private PedidoGateway pedidoGateway;
+
+    @Mock
+    private JdbcTemplate jdbcTemplate;
+
+    @Mock
+    private RedisCommands<String, String> redisCommands;
+
+    @Mock
+    private BancoDeDadosContexto bancoDeDadosContexto;
+
+    @Mock
+    private JsonPresenter jsonPresenter;
 
 
     AutoCloseable openMocks;
@@ -30,6 +51,9 @@ public class PedidoGatewayTest {
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
+        when(bancoDeDadosContexto.getJdbcTemplate()).thenReturn(jdbcTemplate);
+        when(bancoDeDadosContexto.getRedisCommands()).thenReturn(redisCommands);
+        pedidoGateway = new PedidoGateway(bancoDeDadosContexto, jsonPresenter);
     }
 
     @AfterEach
@@ -44,12 +68,12 @@ public class PedidoGatewayTest {
         var pedido = getPedido();
 
         //Act
-        doNothing().when(pedidoGateway).cadastrar(any(Pedido.class));
+        doNothing().when(pedidoGatewayMock).cadastrar(any(Pedido.class));
 
-        pedidoGateway.cadastrar(pedido);
+        pedidoGatewayMock.cadastrar(pedido);
 
         //Assert
-        verify(pedidoGateway, times(1)).cadastrar(any(Pedido.class));
+        verify(pedidoGatewayMock, times(1)).cadastrar(any(Pedido.class));
     }
 
     @Test
@@ -63,9 +87,9 @@ public class PedidoGatewayTest {
 
         //Act
 
-        when(pedidoGateway.listar()).thenReturn(listaPedidos);
+        when(pedidoGatewayMock.listar()).thenReturn(listaPedidos);
 
-        var pedidos = pedidoGateway.listar();
+        var pedidos = pedidoGatewayMock.listar();
 
         //Assert
         assertThat(pedidos).hasSizeGreaterThan(0);
@@ -80,32 +104,38 @@ public class PedidoGatewayTest {
 
         //Act
 
-        doNothing().when(pedidoGateway).cadastrarProdutosPorPedido(anyInt(), any(PedidoProduto.class));
+        doNothing().when(pedidoGatewayMock).cadastrarProdutosPorPedido(anyInt(), any(PedidoProduto.class));
 
         for(PedidoProduto p: pedido1.getListaProduto())
-            pedidoGateway.cadastrarProdutosPorPedido(pedido1.getId(), p);
+            pedidoGatewayMock.cadastrarProdutosPorPedido(pedido1.getId(), p);
 
         //Assert
-        verify(pedidoGateway, times(pedido1.getListaProduto().size())).cadastrarProdutosPorPedido(anyInt(), any(PedidoProduto.class));
+        verify(pedidoGatewayMock, times(pedido1.getListaProduto().size())).cadastrarProdutosPorPedido(anyInt(), any(PedidoProduto.class));
     }
 
     @Test
     void deveAtualizarStatus(){
         //Arrange
-        doNothing().when(pedidoGateway).atualizaStatus(anyInt(),any(StatusPedido.class));
+        doNothing().when(pedidoGatewayMock).atualizaStatus(anyInt(),any(StatusPedido.class));
         //Act
 
-        pedidoGateway.atualizaStatus(1, StatusPedido.PRONTO);
+        pedidoGatewayMock.atualizaStatus(1, StatusPedido.PRONTO);
 
         //Assert
-        verify(pedidoGateway, times(1)).atualizaStatus(anyInt(),any(StatusPedido.class));
+        verify(pedidoGatewayMock, times(1)).atualizaStatus(anyInt(),any(StatusPedido.class));
     }
 
     @Test
-    void deveVerificarPedidoExiste(){
+    void deveVerificarPedidoExiste_Postgree(){
 
         //Act
-        when(pedidoGateway.verificaPedidoExiste(anyInt())).thenReturn(true);
+        when(jdbcTemplate.queryForObject(
+                anyString(),
+                any(Object[].class),
+                eq(Integer.class)
+        )).thenReturn(1);
+
+        when(redisCommands.exists(anyString())).thenReturn(0L);
 
         boolean pedidoExiste = pedidoGateway.verificaPedidoExiste(1);
 
@@ -115,18 +145,61 @@ public class PedidoGatewayTest {
     }
 
     @Test
-    void deveBuscarStatusPedido()
+    void deveVerificarPedidoExiste_Redis(){
+
+        //Act
+        when(jdbcTemplate.queryForObject(
+                anyString(),
+                any(Object[].class),
+                eq(Integer.class)
+        )).thenReturn(0);
+
+        when(redisCommands.exists(anyString())).thenReturn(1L);
+
+        boolean pedidoExiste = pedidoGateway.verificaPedidoExiste(1);
+
+        //Assert
+
+        assertThat(pedidoExiste).isTrue();
+    }
+
+    @Test
+    void deveBuscarStatusPedido_Postgree()
     {
         int idPedido = 1;
 
-        //Act
-        when(pedidoGateway.buscarStatusPedido(anyInt())).thenReturn("Em Preparação");
+        when(jdbcTemplate.queryForObject(
+                anyString(),
+                any(Object[].class),
+                eq(String.class)
+        )).thenReturn("Em Preparação");
+
+        when(redisCommands.get(anyString())).thenReturn(null);
 
         String statusPedido = pedidoGateway.buscarStatusPedido(idPedido);
 
         //Assert
-
         assertThat(statusPedido).isEqualTo("Em Preparação");
+    }
+
+    @Test
+    void deveBuscarStatusPedido_Redis()
+    {
+        int idPedido = 1;
+
+        when(jdbcTemplate.queryForObject(
+                anyString(),
+                any(Object[].class),
+                eq(String.class)
+        )).thenReturn(null);
+
+        when(redisCommands.get(anyString())).thenReturn("Recebido");
+        when(jsonPresenter.deserialize(anyString(), eq(Pedido.class))).thenReturn(PedidoBuilder.getPedido());
+
+        String statusPedido = pedidoGateway.buscarStatusPedido(idPedido);
+
+        //Assert
+        assertThat(statusPedido).isEqualTo("Recebido");
     }
 
 
