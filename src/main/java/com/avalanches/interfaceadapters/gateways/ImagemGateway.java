@@ -24,7 +24,7 @@ public class ImagemGateway implements ImagemGatewayInterface {
 
     public static final String IMAGENS = "imagens";
 
-    private JdbcOperations jdbcOperations;
+    private final JdbcOperations jdbcOperations;
 
     public ImagemGateway(BancoDeDadosContextoInterface bancoDeDadosContexto) {
 
@@ -73,6 +73,10 @@ public class ImagemGateway implements ImagemGatewayInterface {
     public void excluir(Imagem imagem) {
         jdbcOperations.update("DELETE FROM imagem WHERE id=?", imagem.getId());
 
+        excluirArquivo(imagem);
+    }
+
+    protected void excluirArquivo(Imagem imagem) {
         if (imagem.getCaminho() != null) {
             Path imagePath = Paths.get(IMAGENS).resolve(imagem.getCaminho());
             try {
@@ -83,7 +87,7 @@ public class ImagemGateway implements ImagemGatewayInterface {
         }
     }
 
-    private static void criarArquivo(Imagem imagem) {
+    private void criarArquivo(Imagem imagem) {
         Path imagesFolder = Paths.get(IMAGENS);
         if (!Files.exists(imagesFolder)) {
             try {
@@ -102,7 +106,7 @@ public class ImagemGateway implements ImagemGatewayInterface {
         }
     }
 
-    private static void editarArquivo(Imagem imagem) {
+    protected void editarArquivo(Imagem imagem) {
         Path imagesFolder = Paths.get(IMAGENS);
         Path imagePath = imagesFolder.resolve(imagem.getCaminho());
         if (!Files.exists(imagesFolder) || !Files.exists(imagePath)) {

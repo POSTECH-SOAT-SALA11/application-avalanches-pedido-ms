@@ -68,7 +68,7 @@ public class PedidoGateway implements PedidoGatewayInterface {
     }
 
     private void cadastrarPostgres(Pedido pedido) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        KeyHolder keyHolder = criarGeneratedKeyHolder();
         jdbcOperations.update(
                 new PreparedStatementCreator() {
                     @Override
@@ -88,6 +88,10 @@ public class PedidoGateway implements PedidoGatewayInterface {
                 keyHolder
         );
         pedido.setId((int) keyHolder.getKeys().get("id"));
+    }
+
+    protected GeneratedKeyHolder criarGeneratedKeyHolder() {
+        return new GeneratedKeyHolder();
     }
 
     private void cadastrarRedis(Pedido pedido) {
@@ -145,7 +149,7 @@ public class PedidoGateway implements PedidoGatewayInterface {
         }
     }
 
-    private static class PedidoResultSetExtractor implements ResultSetExtractor<List<Pedido>> {
+    protected static class PedidoResultSetExtractor implements ResultSetExtractor<List<Pedido>> {
 
         @Override
         public List<Pedido> extractData(ResultSet rs) throws SQLException {
