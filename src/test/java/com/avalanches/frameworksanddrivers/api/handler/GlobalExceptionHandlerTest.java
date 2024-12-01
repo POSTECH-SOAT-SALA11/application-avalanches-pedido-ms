@@ -1,24 +1,17 @@
 package com.avalanches.frameworksanddrivers.api.handler;
 
 import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
-import com.avalanches.frameworksanddrivers.api.handler.ErroResponse;
-import com.avalanches.frameworksanddrivers.api.handler.GlobalExceptionHandler;
-import com.avalanches.frameworksanddrivers.api.handler.ValidationErrorDetails;
 import com.avalanches.frameworksanddrivers.databases.StatusPedidoInvalidoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.TypeMismatchException;
-import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.webjars.NotFoundException;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 

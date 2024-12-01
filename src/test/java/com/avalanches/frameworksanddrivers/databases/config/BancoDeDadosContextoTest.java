@@ -1,6 +1,5 @@
 package com.avalanches.frameworksanddrivers.databases.config;
 
-import com.avalanches.frameworksanddrivers.databases.config.BancoDeDadosContexto;
 import io.lettuce.core.api.sync.RedisCommands;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PedidoTest {
+class PedidoTest {
 
 
     @Test
-    public void testGetPedido() {
+    void testGetPedido() {
         Pedido pedido = new Pedido(1,
                 StatusPedido.EMPREPARACAO,
                 new BigDecimal("10.0"),

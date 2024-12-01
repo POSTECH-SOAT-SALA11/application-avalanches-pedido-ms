@@ -1,6 +1,5 @@
 package com.avalanches.frameworksanddrivers.api.handler;
 
-import com.avalanches.frameworksanddrivers.api.handler.ErroResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

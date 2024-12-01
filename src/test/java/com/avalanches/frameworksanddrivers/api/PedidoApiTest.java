@@ -2,7 +2,6 @@ package com.avalanches.frameworksanddrivers.api;
 
 import com.avalanches.PedidoBuilder;
 import com.avalanches.enterprisebusinessrules.entities.Pedido;
-import com.avalanches.enterprisebusinessrules.entities.PedidoProduto;
 import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
 import com.avalanches.frameworksanddrivers.api.dto.PedidoParams;
 import com.avalanches.frameworksanddrivers.databases.config.BancoDeDadosContexto;
@@ -32,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class PedidoApiTest {
+class PedidoApiTest {
 
     @Mock
     private BancoDeDadosContexto bancoDeDadosContexto;

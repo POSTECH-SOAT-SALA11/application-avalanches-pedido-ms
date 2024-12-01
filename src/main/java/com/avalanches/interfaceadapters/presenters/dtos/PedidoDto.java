@@ -1,8 +1,5 @@
 package com.avalanches.interfaceadapters.presenters.dtos;
 
-import com.avalanches.enterprisebusinessrules.entities.PedidoProduto;
-import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
-
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;

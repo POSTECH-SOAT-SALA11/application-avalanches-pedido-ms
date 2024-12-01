@@ -2,7 +2,6 @@ package com.avalanches.frameworksanddrivers.api;
 
 import com.avalanches.ProdutoBuilder;
 import com.avalanches.enterprisebusinessrules.entities.CategoriaProduto;
-import com.avalanches.enterprisebusinessrules.entities.Imagem;
 import com.avalanches.enterprisebusinessrules.entities.Produto;
 import com.avalanches.frameworksanddrivers.api.dto.ProdutoParams;
 import com.avalanches.frameworksanddrivers.databases.config.BancoDeDadosContexto;
@@ -30,7 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
-public class ProdutoApiTest {
+class ProdutoApiTest {
     @Mock
     private BancoDeDadosContexto bancoDeDadosContexto;
 
@@ -157,7 +156,7 @@ public class ProdutoApiTest {
 
     }
 
-    public static @NotNull ArrayList<ImagemDto> getImagens() {
+    private static @NotNull ArrayList<ImagemDto> getImagens() {
 
         var listaImagens = new ArrayList<ImagemDto>();
         var imagem = new ImagemDto(1,

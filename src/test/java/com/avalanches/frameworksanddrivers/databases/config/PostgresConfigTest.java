@@ -1,6 +1,5 @@
 package com.avalanches.frameworksanddrivers.databases.config;
 
-import com.avalanches.frameworksanddrivers.databases.config.PostgresConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

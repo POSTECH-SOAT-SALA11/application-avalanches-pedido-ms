@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class ProdutoUseCaseTest {
+class ProdutoUseCaseTest {
 
     @Mock
     private ProdutoGatewayInterface produtoGateway;
@@ -78,7 +78,7 @@ public class ProdutoUseCaseTest {
     }
 
     @Test
-    public void deveLancarNotFoundQuandoProdutoNaoExistir() {
+    void deveLancarNotFoundQuandoProdutoNaoExistir() {
         Produto produto = new Produto(
                 10,
                 new BigDecimal("29.90"),
@@ -115,7 +115,7 @@ public class ProdutoUseCaseTest {
     }
 
     @Test
-    public void deveLancarNotFoundQuandoProdutoNaoExistirParaExcluir() {
+    void deveLancarNotFoundQuandoProdutoNaoExistirParaExcluir() {
         int produtoId = 10;
 
         when(produtoGateway.consultarProdutosPorID(produtoId)).thenReturn(null); // Produto não existe

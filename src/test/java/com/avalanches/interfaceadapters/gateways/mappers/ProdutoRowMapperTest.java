@@ -1,11 +1,9 @@
 package com.avalanches.interfaceadapters.gateways.mappers;
 
-import com.avalanches.interfaceadapters.gateways.ImagemGateway;
 import com.avalanches.interfaceadapters.gateways.mapper.ProdutoRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
-import org.webjars.NotFoundException;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -15,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class ProdutoRowMapperTest {
+class ProdutoRowMapperTest {
 
 
     ProdutoRowMapper produtoRowMapper;

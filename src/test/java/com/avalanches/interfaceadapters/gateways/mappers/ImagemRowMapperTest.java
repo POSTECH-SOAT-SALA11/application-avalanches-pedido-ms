@@ -1,19 +1,16 @@
 package com.avalanches.interfaceadapters.gateways.mappers;
 
 import com.avalanches.interfaceadapters.gateways.mapper.ImagemRowMapper;
-import com.avalanches.interfaceadapters.gateways.mapper.ProdutoRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
-
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
-public class ImagemRowMapperTest {
+class ImagemRowMapperTest {
 
     ImagemRowMapper imagemRowMapper;
 

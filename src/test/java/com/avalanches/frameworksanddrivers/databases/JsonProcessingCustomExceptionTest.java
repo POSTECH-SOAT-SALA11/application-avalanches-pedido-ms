@@ -1,15 +1,14 @@
 package com.avalanches.frameworksanddrivers.databases;
 
-import com.avalanches.frameworksanddrivers.databases.JsonProcessingCustomException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class JsonProcessingCustomExceptionTest {
+class JsonProcessingCustomExceptionTest {
 
     @Test
-    public void testJsonProcessingCustomExceptionMessage() {
+    void testJsonProcessingCustomExceptionMessage() {
         // Arrange
         String errorMessage = "Invalid JSON format";
 
@@ -21,7 +20,7 @@ public class JsonProcessingCustomExceptionTest {
     }
 
     @Test
-    public void testJsonProcessingCustomExceptionType() {
+    void testJsonProcessingCustomExceptionType() {
         // Arrange
         String errorMessage = "Invalid JSON format";
 
@@ -33,7 +32,7 @@ public class JsonProcessingCustomExceptionTest {
     }
 
     @Test
-    public void testJsonProcessingCustomExceptionIsRuntimeException() {
+    void testJsonProcessingCustomExceptionIsRuntimeException() {
         // Arrange
         String errorMessage = "Invalid JSON format";
 

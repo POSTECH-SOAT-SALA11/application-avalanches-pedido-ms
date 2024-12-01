@@ -1,6 +1,5 @@
 package com.avalanches.frameworksanddrivers.databases.config;
 
-import com.avalanches.frameworksanddrivers.databases.config.RedisConfig;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;

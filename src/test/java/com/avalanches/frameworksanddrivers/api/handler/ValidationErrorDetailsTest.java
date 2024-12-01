@@ -1,6 +1,5 @@
 package com.avalanches.frameworksanddrivers.api.handler;
 
-import com.avalanches.frameworksanddrivers.api.handler.ValidationErrorDetails;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

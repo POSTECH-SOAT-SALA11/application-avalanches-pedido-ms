@@ -8,13 +8,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.webjars.NotFoundException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,19 +26,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.avalanches.interfaceadapters.gateways.ImagemGateway.IMAGENS;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class ImagemGatewayTest {
+class ImagemGatewayTest {
 
     @Spy
     @InjectMocks
     private ImagemGateway imagemGateway;
-
-   @Mock
-    private ImagemGateway imagemGatewayMock;
 
     @Mock
     private BancoDeDadosContexto bancoDeDadosContexto;
@@ -49,14 +43,7 @@ public class ImagemGatewayTest {
     private JdbcTemplate jdbcTemplate;
 
     @Mock
-    private RedisCommands<String, String> redisCommands;
-
-//    @Mock
-//    private Files files;
-
-    @Mock
     private GeneratedKeyHolder keyHolder;
-
 
     AutoCloseable openMocks;
 

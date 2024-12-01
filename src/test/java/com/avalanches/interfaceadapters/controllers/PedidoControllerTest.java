@@ -7,7 +7,6 @@ import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
 import com.avalanches.frameworksanddrivers.databases.interfaces.BancoDeDadosContextoInterface;
 import com.avalanches.interfaceadapters.gateways.PedidoGateway;
 import com.avalanches.interfaceadapters.gateways.ProdutoGateway;
-import com.avalanches.interfaceadapters.gateways.interfaces.PedidoGatewayInterface;
 import com.avalanches.interfaceadapters.presenters.JsonPresenter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class PedidoControllerTest{
+class PedidoControllerTest{
     @Mock
     private BancoDeDadosContextoInterface bancoDeDadosContexto;
 
