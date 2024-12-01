@@ -11,10 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.webjars.NotFoundException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -58,7 +62,7 @@ public class ProdutoUseCaseTest {
 
 
     @Test
-    void deveAtualizarProduto(){
+    void deveAtualizarProdutoComSucesso(){
         //Arrange
 
         var produto = ProdutoBuilder.getProduto();
@@ -74,7 +78,28 @@ public class ProdutoUseCaseTest {
     }
 
     @Test
-    void deveExcluirProduto(){
+    public void deveLancarNotFoundQuandoProdutoNaoExistir() {
+        Produto produto = new Produto(
+                10,
+                new BigDecimal("29.90"),
+                3,
+                CategoriaProduto.LANCHE,
+                "X-Burger",
+                "xpto",
+                List.of()
+        );
+
+        when(produtoGateway.consultarProdutosPorID(10)).thenReturn(null); // Produto não existe
+
+        assertThrows(NotFoundException.class, () -> {
+            produtoUseCase.atualizarProduto(produto, produtoGateway, imagemGateway);
+        });
+
+        verify(produtoGateway).consultarProdutosPorID(10);
+    }
+
+    @Test
+    void deveExcluirProdutoComSucesso(){
         //Arrange
         var idProduto = 1;
         var produto =  ProdutoBuilder.getProduto();
@@ -87,6 +112,19 @@ public class ProdutoUseCaseTest {
 
         //Assert
         verify(produtoGateway, times(1)).excluir(anyInt());;
+    }
+
+    @Test
+    public void deveLancarNotFoundQuandoProdutoNaoExistirParaExcluir() {
+        int produtoId = 10;
+
+        when(produtoGateway.consultarProdutosPorID(produtoId)).thenReturn(null); // Produto não existe
+
+        assertThrows(NotFoundException.class, () -> {
+            produtoUseCase.excluirProduto(produtoId, produtoGateway, imagemGateway);
+        });
+
+        verify(produtoGateway).consultarProdutosPorID(produtoId);
     }
 
     @Test
