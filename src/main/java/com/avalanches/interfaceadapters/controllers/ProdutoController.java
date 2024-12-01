@@ -12,6 +12,7 @@ import com.avalanches.interfaceadapters.presenters.ProdutoPresenter;
 import com.avalanches.interfaceadapters.presenters.dtos.ProdutoDto;
 import com.avalanches.interfaceadapters.presenters.interfaces.ProdutoPresenterInterface;
 import com.avalanches.frameworksanddrivers.databases.interfaces.BancoDeDadosContextoInterface;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import java.util.List;
 
@@ -56,10 +57,10 @@ public class ProdutoController implements ProdutoControllerInterface {
     }
 
     protected ImagemGateway criarImagemGateway(BancoDeDadosContextoInterface bancoDeDadosContexto) {
-        return new ImagemGateway(bancoDeDadosContexto);
+        return new ImagemGateway(bancoDeDadosContexto, new GeneratedKeyHolder());
     }
 
     protected ProdutoGateway criarProdutoGateway(BancoDeDadosContextoInterface bancoDeDadosContexto) {
-        return new ProdutoGateway(bancoDeDadosContexto);
+        return new ProdutoGateway(bancoDeDadosContexto, new GeneratedKeyHolder());
     }
 }

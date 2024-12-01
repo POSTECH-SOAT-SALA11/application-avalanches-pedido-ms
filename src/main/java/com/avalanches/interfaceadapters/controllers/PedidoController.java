@@ -15,6 +15,7 @@ import com.avalanches.interfaceadapters.presenters.dtos.PedidoDto;
 import com.avalanches.interfaceadapters.presenters.interfaces.JsonPresenterInterface;
 import com.avalanches.interfaceadapters.presenters.interfaces.PedidoPresenterInterface;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class PedidoController implements PedidoControllerInterface {
     }
 
     protected ProdutoGateway criarProdutoGateway(BancoDeDadosContextoInterface bancoDeDadosContexto) {
-        return new ProdutoGateway(bancoDeDadosContexto);
+        return new ProdutoGateway(bancoDeDadosContexto, new GeneratedKeyHolder());
     }
 
     protected PedidoGateway criarPedidoGateway(BancoDeDadosContextoInterface bancoDeDadosContexto, JsonPresenterInterface jsonPresenter) {

@@ -11,11 +11,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -24,18 +30,14 @@ public class ProdutoGatewayTest {
     @Mock
     private JdbcTemplate jdbcTemplate;
 
-
+    private List<Imagem> imagens;
 
     @Mock
     private BancoDeDadosContexto bancoDeDadosContexto;
 
+    @Spy
     @InjectMocks
     private ProdutoGateway produtoGateway;
-
-    @Mock
-    private ProdutoGateway produtoGatewayMock;
-
-
 
     @Mock
     private GeneratedKeyHolder keyHolder;
@@ -46,7 +48,7 @@ public class ProdutoGatewayTest {
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
         when(bancoDeDadosContexto.getJdbcTemplate()).thenReturn(jdbcTemplate);
-        produtoGateway = new ProdutoGateway(bancoDeDadosContexto);
+        produtoGateway = new ProdutoGateway(bancoDeDadosContexto, keyHolder);
     }
 
     @AfterEach
@@ -55,18 +57,36 @@ public class ProdutoGatewayTest {
     }
 
     @Test
-    void deveCadastrarProduto(){
-        //Arrange
+    void deveCadastrarProduto() {
 
-        var produto = ProdutoBuilder.getProduto();
+        imagens = List.of(
+                new Imagem(100, "imagem1.png", "Descrição 1", "image/png", 2048, "/caminho/imagem1.png", new byte[0]),
+                new Imagem(101, "imagem2.jpg", "Descrição 2", "image/jpeg", 3072, "/caminho/imagem2.jpg", new byte[0])
+        );
 
-        //Act
-        doNothing().when(produtoGatewayMock).cadastrar(any(Produto.class));
+        Produto produto = new Produto(
+                1,
+                new BigDecimal("23.90"),
+                10,
+                CategoriaProduto.LANCHE,
+                "X-Burger",
+                "X-Burger xpto",
+                imagens
+        );
 
-        produtoGatewayMock.cadastrar(produto);
+        Map<String, Object> generatedKeys = new HashMap<>();
+        generatedKeys.put("id", 1);
+        when(keyHolder.getKeys()).thenReturn(generatedKeys);
 
-        //Assert
-        verify(produtoGatewayMock, times(1)).cadastrar(any(Produto.class));
+        when(jdbcTemplate.update(any(), eq(keyHolder))).thenReturn(1);
+
+        produtoGateway.cadastrar(produto);
+
+        ArgumentCaptor<KeyHolder> keyHolderCaptor = ArgumentCaptor.forClass(KeyHolder.class);
+        verify(jdbcTemplate).update(any(), keyHolderCaptor.capture());
+
+        assertNotNull(produto.getId());
+        assertEquals(1, produto.getId());
     }
 
     @Test
@@ -198,41 +218,5 @@ public class ProdutoGatewayTest {
         //Assert
         assertThat(produtoExiste).isTrue();
     }
-
-
-//    public static @NotNull Produto getProduto() {
-//
-//        var imagens = getImagens();
-//
-//        Produto produto = new Produto(1,
-//                new BigDecimal("10.00"),
-//                10,
-//                CategoriaProduto.LANCHE,
-//                "XAvalanche",
-//                "XAvalanche com molho especial",
-//                imagens
-//        );
-//
-//
-//        return produto;
-//    }
-//
-//    private static @NotNull ArrayList<Imagem> getImagens() {
-//
-//        var listaImagens = new ArrayList<Imagem>();
-//        var imagem = new Imagem(1,
-//                "xAvalanche.jpg",
-//                "xAvalanche1",
-//                "jpg",
-//                100,
-//                "C:/Imagens",
-//                new byte[] {69, 121, 101, 45, 62, 118, 101, 114, (byte) 196, (byte) 195, 61, 101, 98}
-//                );
-//
-//        listaImagens.add(imagem);
-//
-//        return listaImagens;
-//    }
-
 
 }

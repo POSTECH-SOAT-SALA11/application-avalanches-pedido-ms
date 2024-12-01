@@ -26,14 +26,16 @@ import java.util.List;
 public class ProdutoGateway implements ProdutoGatewayInterface {
 
     private JdbcOperations jdbcOperations;
+    private KeyHolder keyHolder;
 
-    public ProdutoGateway(BancoDeDadosContextoInterface bancoDeDadosContexto) {
+    public ProdutoGateway(BancoDeDadosContextoInterface bancoDeDadosContexto, KeyHolder keyHolder) {
         this.jdbcOperations = bancoDeDadosContexto.getJdbcTemplate();
+        this.keyHolder = keyHolder != null ? keyHolder : new GeneratedKeyHolder();
     }
 
     @Override
     public void cadastrar(Produto produto) {
-        KeyHolder keyHolder = criarGeneratedKeyHolder();
+
         jdbcOperations.update(
             new PreparedStatementCreator() {
                 @Override
@@ -53,10 +55,6 @@ public class ProdutoGateway implements ProdutoGatewayInterface {
             keyHolder
         );
         produto.setId((int) keyHolder.getKeys().get("id"));
-    }
-
-    protected GeneratedKeyHolder criarGeneratedKeyHolder() {
-        return new GeneratedKeyHolder();
     }
 
     @Override
