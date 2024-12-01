@@ -26,12 +26,15 @@ public class PedidoGateway implements PedidoGatewayInterface {
     private final RedisCommands<String, String> redisCommands;
     private final JdbcOperations jdbcOperations;
     private final JsonPresenterInterface jsonPresenter;
+    private KeyHolder keyHolder;
 
     public PedidoGateway(BancoDeDadosContextoInterface bancoDeDadosContexto,
-                         JsonPresenterInterface jsonPresenter) {
+                         JsonPresenterInterface jsonPresenter,
+                         KeyHolder keyHolder) {
         this.jdbcOperations = bancoDeDadosContexto.getJdbcTemplate();
         this.redisCommands = bancoDeDadosContexto.getRedisCommands();
         this.jsonPresenter = jsonPresenter;
+        this.keyHolder = keyHolder != null ? keyHolder : new GeneratedKeyHolder();
     }
 
     @Override
@@ -68,7 +71,6 @@ public class PedidoGateway implements PedidoGatewayInterface {
     }
 
     private void cadastrarPostgres(Pedido pedido) {
-        KeyHolder keyHolder = criarGeneratedKeyHolder();
         jdbcOperations.update(
                 new PreparedStatementCreator() {
                     @Override

@@ -11,13 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -34,6 +32,7 @@ public class PedidoGatewayTest {
     @Mock
     private PedidoGateway pedidoGatewayMock;
 
+    @Spy
     @InjectMocks
     private PedidoGateway pedidoGateway;
 
@@ -61,8 +60,8 @@ public class PedidoGatewayTest {
         openMocks = MockitoAnnotations.openMocks(this);
         when(bancoDeDadosContexto.getJdbcTemplate()).thenReturn(jdbcTemplate);
         when(bancoDeDadosContexto.getRedisCommands()).thenReturn(redisCommands);
-        pedidoGateway = new PedidoGateway(bancoDeDadosContexto, jsonPresenter);
-        //        jsonPresenter = new JsonPresenter();
+        pedidoGateway = new PedidoGateway(bancoDeDadosContexto, jsonPresenter, keyHolder);
+
     }
 
     @AfterEach
@@ -70,27 +69,24 @@ public class PedidoGatewayTest {
         openMocks.close();
     }
 
-//    @Test
-//    void deveRegistrarPedido(){
-//        //Arrange
-//
-//        var pedido = getPedido();
-//
-//        //Act
-//        Map<String, Object> generatedKeys = new HashMap<>();
-//        generatedKeys.put("id", 1);
-//
-////        when(pedidoGateway.criarGeneratedKeyHolder()).thenReturn(keyHolder);
-//        doReturn(keyHolder).when(pedidoGateway).criarGeneratedKeyHolder();
-//        when(keyHolder.getKeys()).thenReturn(generatedKeys);
-//
-//        when(jdbcTemplate.update(any(PreparedStatementCreator.class), eq(keyHolder))).thenReturn(1);
-//
-//        pedidoGateway.cadastrar(pedido);
-//
-//        //Assert
-//        verify(pedidoGatewayMock, times(1)).cadastrar(any(Pedido.class));
-//    }
+    @Test
+    void deveRegistrarPedido(){
+        //Arrange
+
+        var pedido = PedidoBuilder.getPedido();
+
+        //Act
+        Map<String, Object> generatedKeys = new HashMap<>();
+        generatedKeys.put("id", 1);
+        when(keyHolder.getKeys()).thenReturn(generatedKeys);
+
+        when(jdbcTemplate.update(any(PreparedStatementCreator.class), eq(keyHolder))).thenReturn(1);
+
+        pedidoGateway.cadastrar(pedido);
+
+        ArgumentCaptor<KeyHolder> keyHolderCaptor = ArgumentCaptor.forClass(KeyHolder.class);
+        verify(jdbcTemplate).update(any(PreparedStatementCreator.class), keyHolderCaptor.capture());
+    }
 
     @Test
     void deveListar(){
@@ -110,23 +106,22 @@ public class PedidoGatewayTest {
         assertThat(pedidos).hasSizeGreaterThan(0);
     }
 
-//    @Test
-//    void deveCadastrarProdutosPorPedido()
-//    {
-//        //Arrange
-//
-//        var pedido1 = getPedido();
-//
-//        //Act
-//
-//        doNothing().when(pedidoGatewayMock).cadastrarProdutosPorPedido(anyInt(), any(PedidoProduto.class));
-//
-//        for(PedidoProduto p: pedido1.getListaProduto())
-//            pedidoGatewayMock.cadastrarProdutosPorPedido(pedido1.getId(), p);
-//
-//        //Assert
-//        verify(pedidoGatewayMock, times(pedido1.getListaProduto().size())).cadastrarProdutosPorPedido(anyInt(), any(PedidoProduto.class));
-//    }
+    @Test
+    void deveCadastrarProdutosPorPedido()
+    {
+        //Arrange
+        var pedido = getPedido();
+
+        //Act
+
+        when(jdbcTemplate.update(anyString(),anyInt(),anyInt(),anyInt(),any(BigDecimal.class))).thenReturn(1);
+
+        for(PedidoProduto p: pedido.getListaProduto())
+            pedidoGateway.cadastrarProdutosPorPedido(pedido.getId(), p);
+
+        //Assert
+        verify(jdbcTemplate, times(pedido.getListaProduto().size())).update(anyString(),anyInt(),anyInt(),anyInt(),any(BigDecimal.class));
+    }
 
     @Test
     void deveAtualizarStatus(){

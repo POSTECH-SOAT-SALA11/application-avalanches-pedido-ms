@@ -53,7 +53,7 @@ public class PedidoController implements PedidoControllerInterface {
     }
 
     protected PedidoGateway criarPedidoGateway(BancoDeDadosContextoInterface bancoDeDadosContexto, JsonPresenterInterface jsonPresenter) {
-        return new PedidoGateway(bancoDeDadosContexto, jsonPresenter);
+        return new PedidoGateway(bancoDeDadosContexto, jsonPresenter, new GeneratedKeyHolder());
     }
 
     protected PedidoUseCase criarPedidoUseCase() {
