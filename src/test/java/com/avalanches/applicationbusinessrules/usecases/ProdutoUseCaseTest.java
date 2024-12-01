@@ -1,5 +1,6 @@
 package com.avalanches.applicationbusinessrules.usecases;
 
+import com.avalanches.ProdutoBuilder;
 import com.avalanches.enterprisebusinessrules.entities.CategoriaProduto;
 import com.avalanches.enterprisebusinessrules.entities.Produto;
 import com.avalanches.interfaceadapters.gateways.interfaces.ImagemGatewayInterface;
@@ -13,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
-import static com.avalanches.interfaceadapters.gateways.ProdutoGatewayTest.getProduto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -45,7 +45,7 @@ public class ProdutoUseCaseTest {
     void deveCadastrarProduto(){
         //Arrange
 
-        var produto = getProduto();
+        var produto = ProdutoBuilder.getProduto();
 
         //Act
         doNothing().when(produtoGateway).cadastrar(any(Produto.class));
@@ -61,11 +61,11 @@ public class ProdutoUseCaseTest {
     void deveAtualizarProduto(){
         //Arrange
 
-        var produto = getProduto();
+        var produto = ProdutoBuilder.getProduto();
 
         //Act
         doNothing().when(produtoGateway).atualizar(any(Produto.class));
-        when(produtoGateway.consultarProdutosPorID(anyInt())).thenReturn(getProduto());
+        when(produtoGateway.consultarProdutosPorID(anyInt())).thenReturn(produto);
 
         produtoUseCase.atualizarProduto(produto, produtoGateway, imagemGateway);
 
@@ -77,10 +77,11 @@ public class ProdutoUseCaseTest {
     void deveExcluirProduto(){
         //Arrange
         var idProduto = 1;
+        var produto =  ProdutoBuilder.getProduto();
 
         //Act
         doNothing().when(produtoGateway).excluir(anyInt());
-        when(produtoGateway.consultarProdutosPorID(anyInt())).thenReturn(getProduto());
+        when(produtoGateway.consultarProdutosPorID(anyInt())).thenReturn(produto);
 
         produtoUseCase.excluirProduto(idProduto, produtoGateway, imagemGateway);
 
@@ -92,8 +93,8 @@ public class ProdutoUseCaseTest {
     void deveConsultarProdutos(){
         //Arrange
         var listaProdutos = new ArrayList<Produto>();
-        var produto1 = getProduto();
-        var produto2 = getProduto();
+        var produto1 = ProdutoBuilder.getProduto();
+        var produto2 =  ProdutoBuilder.getProduto();
         listaProdutos.add(produto1);
         listaProdutos.add(produto2);
 

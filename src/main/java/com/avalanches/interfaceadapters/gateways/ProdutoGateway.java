@@ -9,6 +9,7 @@ import com.avalanches.frameworksanddrivers.databases.interfaces.BancoDeDadosCont
 import com.avalanches.interfaceadapters.gateways.interfaces.ProdutoGatewayInterface;
 import com.avalanches.interfaceadapters.gateways.mapper.ImagemRowMapper;
 import com.avalanches.interfaceadapters.gateways.mapper.ProdutoRowMapper;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -32,7 +33,7 @@ public class ProdutoGateway implements ProdutoGatewayInterface {
 
     @Override
     public void cadastrar(Produto produto) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        KeyHolder keyHolder = criarGeneratedKeyHolder();
         jdbcOperations.update(
             new PreparedStatementCreator() {
                 @Override
@@ -52,6 +53,10 @@ public class ProdutoGateway implements ProdutoGatewayInterface {
             keyHolder
         );
         produto.setId((int) keyHolder.getKeys().get("id"));
+    }
+
+    protected GeneratedKeyHolder criarGeneratedKeyHolder() {
+        return new GeneratedKeyHolder();
     }
 
     @Override

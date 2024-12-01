@@ -18,7 +18,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
 
-import static com.avalanches.interfaceadapters.gateways.ProdutoGatewayTest.getProduto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -133,7 +132,7 @@ public class ProdutoControllerTest {
 
         doNothing().when(produtoGateway).excluir(anyInt());
         doNothing().when(produtoUseCase).excluirProduto(anyInt(),any(ProdutoGateway.class),any(ImagemGateway.class));
-        when(produtoGateway.consultarProdutosPorID(anyInt())).thenReturn(getProduto());
+        when(produtoGateway.consultarProdutosPorID(anyInt())).thenReturn(ProdutoBuilder.getProduto());
 
         produtoControllerSpy.excluirProduto(idProduto, bancoDeDadosContexto);
 
