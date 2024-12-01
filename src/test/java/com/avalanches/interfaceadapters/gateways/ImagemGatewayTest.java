@@ -91,7 +91,6 @@ class ImagemGatewayTest {
         verify(ps).setString(4, imagem.getCaminho());
         verify(ps).setInt(5, imagem.getTamanho());
 
-        assertNotNull(imagem.getId());
         assertEquals(1, imagem.getId());
     }
 
@@ -107,9 +106,11 @@ class ImagemGatewayTest {
 
             mockedFiles.when(() -> Files.write(imagePath, new byte[]{})).thenReturn(imagePath);
 
+            when(jdbcTemplate.update(anyString(), anyString(),anyString(),anyString(),anyString(), anyInt(),anyInt())).thenReturn(1);
+
             imagemGateway.atualizar(imagem);
 
-            assertNotNull(imagem.getId());
+            verify(jdbcTemplate, times(1)).update(anyString(), anyString(),anyString(),anyString(),anyString(), anyInt(),anyInt());
        }
     }
 
