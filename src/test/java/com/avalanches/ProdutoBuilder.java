@@ -3,7 +3,6 @@ package com.avalanches;
 import com.avalanches.enterprisebusinessrules.entities.CategoriaProduto;
 import com.avalanches.enterprisebusinessrules.entities.Imagem;
 import com.avalanches.enterprisebusinessrules.entities.Produto;
-import com.avalanches.frameworksanddrivers.api.dto.ImagemParams;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -40,19 +39,5 @@ public class ProdutoBuilder {
         listaImagens.add(imagem);
 
         return listaImagens;
-    }
-
-
-    public static @NotNull ImagemParams[] getImagemParams() {
-
-        var imagem = new ImagemParams(1,
-                "xAvalanche.jpg",
-                "xAvalanche1",
-                "jpg",
-                100,
-                new byte[] {69, 121, 101, 45, 62, 118, 101, 114, (byte) 196, (byte) 195, 61, 101, 98}
-        );
-
-        return new ImagemParams[]{imagem};
     }
 }
