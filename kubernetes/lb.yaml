@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: avalanches-app-loadbalancer
+  name: pedido-app-loadbalancer
   labels:
-    app: avalanches
+    app: pedido
 spec:
   type: LoadBalancer
   ports:
-    - port: 80           # Porta externa
-      targetPort: 8080    # Porta onde sua aplicação está rodando
+    - port: 81         # Porta externa
+      targetPort: 8081    # Porta onde sua aplicação está rodando
   selector:
-    app: avalanches
+    app: pedido
