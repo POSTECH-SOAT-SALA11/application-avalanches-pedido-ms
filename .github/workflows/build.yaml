@@ -63,18 +63,30 @@ jobs:
       - name: Retrieve Secrets from AWS Secrets Manager and create Kubernetes secret
         run: |
           secret=$(aws secretsmanager get-secret-value --secret-id pedido-dbcredentials --region sa-east-1 --query SecretString --output text)
+          secretp=$(aws secretsmanager get-secret-value --secret-id pedido-dbcredentials-postgree --region sa-east-1 --query SecretString --output text)
 
           # Parse o JSON dos segredos
           redis_host=$(echo $secret | jq -r '.redis_host')
           redis_port=$(echo $secret | jq -r '.redis_port')
           redis_password=$(echo $secret | jq -r '.redis_password')
 
+          db_host=$(echo $secretp | jq -r '.db_host')
+          db_name=$(echo $secretp | jq -r '.db_name')
+          db_password=$(echo $secretp | jq -r '.db_password')
+          db_port=$(echo $secretp | jq -r '.db_port')
+          db_user=$(echo $secretp | jq -r '.db_user')
+
           # Criar o secret no Kubernetes
           kubectl delete secret pagamento-dbcredentials || true  # Para evitar erro caso já exista
           kubectl create secret generic pedido-dbcredentials \
             --from-literal=redis_host=$redis_host \
             --from-literal=redis_port=$redis_port \
-            --from-literal=redis_password=$redis_password
+            --from-literal=redis_password=$redis_password \
+            --from-literal=db_host=$db_host \
+            --from-literal=db_name=$db_name \
+            --from-literal=db_password=$db_password \
+            --from-literal=db_port=$db_port \
+            --from-literal=db_user=$db_user  
 
       - name: Deploy Sistema Pagamento Mock to EKS
         run: |
