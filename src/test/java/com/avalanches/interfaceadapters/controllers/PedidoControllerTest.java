@@ -5,6 +5,7 @@ import com.avalanches.applicationbusinessrules.usecases.PedidoUseCase;
 import com.avalanches.enterprisebusinessrules.entities.Pedido;
 import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
 import com.avalanches.frameworksanddrivers.databases.interfaces.BancoDeDadosContextoInterface;
+import com.avalanches.interfaceadapters.gateways.PagamentoGateway;
 import com.avalanches.interfaceadapters.gateways.PedidoGateway;
 import com.avalanches.interfaceadapters.gateways.ProdutoGateway;
 import com.avalanches.interfaceadapters.presenters.JsonPresenter;
@@ -75,12 +76,12 @@ class PedidoControllerTest{
         doReturn(produtoGateway).when(pedidoControllerSpy).criarProdutoGateway(bancoDeDadosContexto);  // Mock method
         when(produtoGateway.verificaProdutoExiste(anyInt())).thenReturn(true);
 
-        when(pedidoUseCase.cadastrar(any(Pedido.class), any(PedidoGateway.class),any(ProdutoGateway.class))).thenReturn(pedido.getId());
+        when(pedidoUseCase.cadastrar(any(Pedido.class), any(PedidoGateway.class),any(ProdutoGateway.class), any(PagamentoGateway.class))).thenReturn(pedido.getId());
 
         pedidoControllerSpy.cadastrar(pedido, bancoDeDadosContexto);
 
         //Assert
-        verify(pedidoUseCase, times(1)).cadastrar(any(Pedido.class), any(PedidoGateway.class), any(ProdutoGateway.class));
+        verify(pedidoUseCase, times(1)).cadastrar(any(Pedido.class), any(PedidoGateway.class), any(ProdutoGateway.class), any(PagamentoGateway.class));
     }
 
     @Test

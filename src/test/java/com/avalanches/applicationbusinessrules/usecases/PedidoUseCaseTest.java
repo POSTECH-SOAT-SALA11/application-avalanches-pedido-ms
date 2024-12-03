@@ -3,6 +3,7 @@ package com.avalanches.applicationbusinessrules.usecases;
 import com.avalanches.enterprisebusinessrules.entities.Pedido;
 import com.avalanches.enterprisebusinessrules.entities.PedidoProduto;
 import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
+import com.avalanches.interfaceadapters.gateways.PagamentoGateway;
 import com.avalanches.interfaceadapters.gateways.PedidoGateway;
 import com.avalanches.interfaceadapters.gateways.ProdutoGateway;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +28,9 @@ class PedidoUseCaseTest {
 
     @Mock
     private ProdutoGateway produtoGateway;
+
+    @Mock
+    private PagamentoGateway pagamentoGateway;
 
     @InjectMocks
     private PedidoUseCase pedidoUseCase;
@@ -53,7 +57,7 @@ class PedidoUseCaseTest {
         doNothing().when(pedidoGateway).cadastrar(any(Pedido.class));
         when(produtoGateway.verificaProdutoExiste(anyInt())).thenReturn(true);
 
-        pedidoUseCase.cadastrar(pedido, pedidoGateway, produtoGateway);
+        pedidoUseCase.cadastrar(pedido, pedidoGateway, produtoGateway, pagamentoGateway);
 
         //Assert
         verify(pedidoGateway, times(1)).cadastrar(any(Pedido.class));
