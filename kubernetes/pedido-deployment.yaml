@@ -24,42 +24,8 @@ spec:
             limits:
               cpu: "1000m"
               memory: "512Mi"
-          # Adição de variáveis de ambiente
           env:
-            - name: DATABASE_DIALECT
-              value: "postgres"
-            - name: POSTGRES_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: pedido-dbcredentials
-                  key: host
-            - name: POSTGRES_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: pedido-dbcredentials
-                  key: port
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: pedido-dbcredentials
-                  key: username
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: pedido-dbcredentials
-                  key: password
-            - name: POSTGRES_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: pedido-dbcredentials
-                  key: db
-            - name: TYPEORM_CONNECTION
-              value: "postgres"
-            - name: TYPEORM_URL
-              valueFrom:
-                secretKeyRef:
-                  name: pedido-dbcredentials
-                  key: typeorm
+            # Variáveis para o Redis
             - name: REDIS_HOST
               valueFrom:
                 secretKeyRef:
@@ -75,3 +41,33 @@ spec:
                 secretKeyRef:
                   name: pedido-dbcredentials
                   key: redis_password
+
+            # Variáveis para o banco de dados PostgreSQL
+            - name: DATABASE_DIALECT
+              value: "postgres"
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: pedido-dbcredentials
+                  key: db_host
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: pedido-dbcredentials
+                  key: db_port
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: pedido-dbcredentials
+                  key: db_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pedido-dbcredentials
+                  key: db_password
+            - name: POSTGRES_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: pedido-dbcredentials
+                  key: db_name
+
