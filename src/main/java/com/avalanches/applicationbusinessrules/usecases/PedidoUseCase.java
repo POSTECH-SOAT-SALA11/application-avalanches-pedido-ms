@@ -5,6 +5,7 @@ import com.avalanches.enterprisebusinessrules.entities.Pedido;
 import com.avalanches.enterprisebusinessrules.entities.PedidoProduto;
 import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
 import com.avalanches.frameworksanddrivers.databases.StatusPedidoInvalidoException;
+import com.avalanches.interfaceadapters.controllers.interfaces.PagamentoGatewayInterface;
 import com.avalanches.interfaceadapters.gateways.interfaces.PedidoGatewayInterface;
 import com.avalanches.interfaceadapters.gateways.interfaces.ProdutoGatewayInterface;
 import org.webjars.NotFoundException;
@@ -17,7 +18,8 @@ public class PedidoUseCase implements PedidoUseCaseInterface {
     @Override
     public Integer cadastrar(Pedido pedido,
                              PedidoGatewayInterface pedidoGateway,
-                             ProdutoGatewayInterface produtoGateway
+                             ProdutoGatewayInterface produtoGateway,
+                             PagamentoGatewayInterface pagamentoGateway
                              ) {
 
         for(PedidoProduto p: pedido.getListaProduto())
@@ -28,8 +30,8 @@ public class PedidoUseCase implements PedidoUseCaseInterface {
         pedido.setValor(this.calcularValorTotal(pedido, produtoGateway));
 
         pedidoGateway.cadastrar(pedido);
-//        PagamentoUseCase pagamentoUseCase = new PagamentoUseCase();
-//        pagamentoUseCase.efetuarPagamento(pedido.getId(), pagamentoGateway);
+
+        pagamentoGateway.efetuarPagamento(pedido.getId());
 
         for(PedidoProduto p: pedido.getListaProduto())
             pedidoGateway.cadastrarProdutosPorPedido(pedido.getId(), p);

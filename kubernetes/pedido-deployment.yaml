@@ -70,3 +70,4 @@ spec:
                 secretKeyRef:
                   name: pedido-dbcredentials
                   key: db_name
+

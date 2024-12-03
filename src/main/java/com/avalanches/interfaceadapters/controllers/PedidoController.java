@@ -4,7 +4,9 @@ import com.avalanches.applicationbusinessrules.usecases.PedidoUseCase;
 import com.avalanches.enterprisebusinessrules.entities.Pedido;
 import com.avalanches.enterprisebusinessrules.entities.StatusPedido;
 import com.avalanches.frameworksanddrivers.databases.interfaces.BancoDeDadosContextoInterface;
+import com.avalanches.interfaceadapters.controllers.interfaces.PagamentoGatewayInterface;
 import com.avalanches.interfaceadapters.controllers.interfaces.PedidoControllerInterface;
+import com.avalanches.interfaceadapters.gateways.PagamentoGateway;
 import com.avalanches.interfaceadapters.gateways.PedidoGateway;
 import com.avalanches.interfaceadapters.gateways.ProdutoGateway;
 import com.avalanches.interfaceadapters.gateways.interfaces.PedidoGatewayInterface;
@@ -14,7 +16,6 @@ import com.avalanches.interfaceadapters.presenters.PedidoPresenter;
 import com.avalanches.interfaceadapters.presenters.dtos.PedidoDto;
 import com.avalanches.interfaceadapters.presenters.interfaces.JsonPresenterInterface;
 import com.avalanches.interfaceadapters.presenters.interfaces.PedidoPresenterInterface;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import java.util.List;
@@ -25,9 +26,10 @@ public class PedidoController implements PedidoControllerInterface {
     public Integer cadastrar(Pedido pedido, BancoDeDadosContextoInterface bancoDeDadosContexto) {
         JsonPresenterInterface jsonPresenter = new JsonPresenter();
         PedidoGatewayInterface pedidoGateway = criarPedidoGateway(bancoDeDadosContexto, jsonPresenter);
+        PagamentoGatewayInterface pagamentoGateway = new PagamentoGateway();
         ProdutoGatewayInterface produtoGateway = criarProdutoGateway(bancoDeDadosContexto);
         PedidoUseCase pedidoUseCase = criarPedidoUseCase();
-        return pedidoUseCase.cadastrar(pedido, pedidoGateway, produtoGateway);
+        return pedidoUseCase.cadastrar(pedido, pedidoGateway, produtoGateway, pagamentoGateway);
     }
 
     @Override
