@@ -1,13 +1,13 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: avalanches-hpa
+  name: pedido-hpa
   namespace: default
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: avalanches-app
+    name: pedido-app
   minReplicas: 1
   maxReplicas: 10
   metrics:
