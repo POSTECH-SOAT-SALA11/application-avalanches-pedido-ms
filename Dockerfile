@@ -23,7 +23,7 @@ FROM openjdk:18-jdk-slim
 WORKDIR /app
 
 # Copie o JAR compilado da imagem de build para a imagem final
-COPY --from=build /app/target/avalanches-0.0.1-SNAPSHOT.jar /app/avalanches-0.0.1-SNAPSHOT.jar
+COPY --from=build /app/target/avalanches-pedido-0.0.1-SNAPSHOT.jar /app/avalanches-pedido-0.0.1-SNAPSHOT.jar
 
 # Comando para executar a aplicação quando o contêiner for iniciado
-CMD ["java", "-jar", "avalanches-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "avalanches-pedido-0.0.1-SNAPSHOT.jar"]
