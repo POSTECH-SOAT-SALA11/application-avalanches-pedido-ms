@@ -1,6 +1,5 @@
 package com.avalanches.frameworksanddrivers.api.handler;
 
-import com.avalanches.enterprisebusinessrules.entities.CategoriaProduto;
 import com.avalanches.frameworksanddrivers.databases.StatusPedidoInvalidoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,18 +55,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErroResponse> handleHttpMessageNotReadableException(MethodArgumentTypeMismatchException ex) {
-        String errorMessage = ex.getCause().getMessage();
 
-        if (errorMessage.contains("CategoriaProduto")) {
-            String validValues = Arrays.stream(CategoriaProduto.values())
-                    .map(Enum::name)
-                    .collect(Collectors.joining(", "));
-            errorMessage = "Valor inválido para o campo categoria. Os valores aceitos são: " + validValues + ".";
-        }
-        ErroResponse erro = new ErroResponse(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
-    }
 }
