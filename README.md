@@ -8,3 +8,7 @@
 
 ## Evidencia da cobertura dos testes unitarios
 ![image](https://github.com/user-attachments/assets/4a0b56bb-fa00-443b-b6e0-59e3f7136f26)
+
+# Vídeos
+- https://youtu.be/UQ2DW_Y6RvI
+- https://youtu.be/V53hE-nBjzk
