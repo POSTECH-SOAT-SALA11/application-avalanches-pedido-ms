@@ -30,11 +30,13 @@ public class PagamentoGatewayTest {
     @Test
     public void testEfetuarPagamento() {
 
-        String url = "https://307946636040.dkr.ecr.sa-east-1.amazonaws.com/ms-pagamento/avalanches/v1/pagamento/efetuar-pagamento/10";
+        String pagamentoUrl = "http://k8s-default-ingressa-0faf251d7e-1124737897.sa-east-1.elb.amazonaws.com/avalanches/v1/pagamento/efetuar-pagamento/{idPedido}";
+        int idPedido = 10;
+        String urlFinal = pagamentoUrl.replace("{idPedido}", Integer.toString(idPedido));
 
         doReturn(restTemplate).when(pagamentoGateway).getRestTemplate();
 
-        when(restTemplate.getForObject(url, Boolean.class)).thenReturn(true);
+        when(restTemplate.getForObject(urlFinal, Boolean.class)).thenReturn(true);
 
         Boolean pagamentoRealizado = pagamentoGateway.efetuarPagamento(10);
 
