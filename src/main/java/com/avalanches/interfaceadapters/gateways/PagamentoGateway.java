@@ -10,7 +10,7 @@ public class PagamentoGateway implements PagamentoGatewayInterface {
     @Override
     public Boolean efetuarPagamento(Integer idPedido) {
 
-        String url = pagamentoUrl + idPedido;
+        String url = pagamentoUrl.replace("{idPedido}",idPedido.toString());
         RestTemplate restTemplate = getRestTemplate();
 
         return restTemplate.getForObject(url, Boolean.class);
